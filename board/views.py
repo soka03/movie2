@@ -54,5 +54,3 @@ def comment(request, pk):
         movieserializer = MovieDetailSerializer(movie)
         return Response(movieserializer.data, status=status.HTTP_201_CREATED)
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-
