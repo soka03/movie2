@@ -99,7 +99,12 @@ class MovieDetailSerializer(serializers.ModelSerializer):
             'comments',
         ]
 
-class MovieListSerializer(serializers.ModelSerializer):
+class MainPageSerializer(serializers.ModelSerializer):
     class Meta:
         model = Movie
-        fields = ['id', 'title_kor', 'poster_url']
+        fields = ['poster_url', 'title_kor']
+        
+class MovieSearchSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Movie
+        fields = ['id', 'title_kor', 'title_eng','poster_url']

@@ -31,13 +31,6 @@ def detail_movie(request, pk):
     except Movie.DoesNotExist: return Response(status=status.HTTP_404_NOT_FOUND)
 
     
-@api_view(['GET'])
-@authentication_classes([JWTAuthentication])
-@permission_classes([AllowAny])
-def list_movie(request):
-    movies = Movie.objects.all()
-    serializer = MovieListSerializer(movies, many = True)
-    return Response(serializer.data, status = status.HTTP_200_OK)
 
 
 @api_view(['POST'])
@@ -54,3 +47,24 @@ def comment(request, pk):
         movieserializer = MovieDetailSerializer(movie)
         return Response(movieserializer.data, status=status.HTTP_201_CREATED)
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+from rest_framework.pagination import PageNumberPagination
+@api_view(['GET'])
+@authentication_classes([JWTAuthentication])
+@permission_classes([AllowAny])
+def mainpage(request):
+    paginator = PageNumberPagination()
+    paginator.page_size = 10
+    movies = Movie.objects.all()
+    result_page = paginator.paginate_queryset(movies, request)
+    serializer = MainPageSerializer(result_page, many=True)
+    return paginator.get_paginated_response(serializer.data)
+
+@api_view(['GET'])
+@authentication_classes([JWTAuthentication])
+@permission_classes([AllowAny])
+def searchmovie(request, name):
+    movies = Movie.objects.filter(title_kor__icontains = name)|Movie.objects.filter(title_eng__icontains = name)
+    serializer = MovieSearchSerializer(movies, many=True)
+    return Response(serializer.data, status=status.HTTP_200_OK)
