@@ -37,7 +37,7 @@ class Comment(models.Model):
     comment = models.TextField()
 
     class Meta:
-        db_table = 'board_comment'  # 기존 테이블 이름 사용
+        db_table = 'board_comment' 
 
     
 
