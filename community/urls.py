@@ -5,7 +5,7 @@ from board.views import *
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('board/', include('board.urls')),
+    path('movie/', include('board.urls')),
     path('member/', include('member.urls')),
     path('member/', include('dj_rest_auth.urls')),
     path('member/signup/', include('dj_rest_auth.registration.urls')),

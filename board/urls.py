@@ -1,9 +1,11 @@
 from django.urls import path
-from . import views
-from .views import init_db
+from .views import *
 
 app_name = 'board'
 
 urlpatterns=[
-    path('',init_db)
+    path('',init_db),
+    path('list/', list_movie),
+    path('<int:pk>/', detail_movie),
+    path('<int:pk>/comment/', comment),
 ]

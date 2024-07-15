@@ -28,45 +28,6 @@
 #     def get_actors(self, obj):
 #         movie_actors = MovieActor.objects.filter(movie=obj)
 #         return MovieActorSerializer(movie_actors, many=True).data
-
-
-
-
-
-
-
-
-
-
-from rest_framework import serializers
-from .models import Movie
-from member.models import Actor
-from .models import Movie
-
-
-
-
-class ActorSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Actor
-        fields = ['movies', 'name', 'character', 'image_url']
-
-
-
-
-
-class MovieSerializer(serializers.ModelSerializer):
-    # actors = ActorSerializer(many=True)
-    # actors= serializers.SerializerMethodField()
-
-    class Meta:
-        model = Movie
-        fields = [
-            'title_kor', 'title_eng', 'poster_url', 'genre', 'showtime', 
-            'release_date', 'plot', 'rating', 'director_name', 'director_image_url'
-        ]
-
-
     # def create(self, validated_data):
     #     actors_data = validated_data.pop('actors')
     #     movie = Movie.objects.create(**validated_data)
@@ -78,3 +39,67 @@ class MovieSerializer(serializers.ModelSerializer):
 
         
 
+from rest_framework import serializers
+from .models import *
+
+
+class ActorSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Actor
+        fields = ['name', 'character', 'image_url']
+
+class SaveActorSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Actor
+        fields = ['name', 'character', 'image_url']
+
+class SaveMovieSerializer(serializers.ModelSerializer):
+    actors = SaveActorSerializer(many = True)
+    class Meta:
+        model = Movie
+        fields = [
+            'actors', 'title_kor', 'title_eng', 'poster_url', 'genre', 'showtime', 
+            'release_date', 'plot', 'rating', 'director_name', 'director_image_url'
+        ]
+
+    def create(self, validated_data):
+        actor_datas = validated_data.pop('actors')
+        movie = Movie.objects.create(**validated_data)
+        for actor_data in actor_datas:
+            actor, created = Actor.objects.get_or_create(**actor_data)
+            movie.actors.add(actor)
+        return "success"
+
+
+class CommentSerializer(serializers.ModelSerializer):
+    nickname = serializers.SerializerMethodField()
+    class Meta:
+        model = Comment
+        fields = ['id', 'nickname', 'comment']
+    def get_nickname(self, obj):
+        return obj.user.nickname
+
+class MovieDetailSerializer(serializers.ModelSerializer):
+    actors = ActorSerializer(many=True, read_only=True)
+    comments = CommentSerializer(many=True, read_only=True)
+    class Meta:
+        model = Movie
+        fields = [
+            'actors',
+            'title_kor',
+            'title_eng',
+            'poster_url',
+            'genre',
+            'showtime',
+            'release_date',
+            'plot',
+            'rating',
+            'director_name',
+            'director_image_url',
+            'comments',
+        ]
+
+class MovieListSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Movie
+        fields = ['id', 'title_kor', 'poster_url']
