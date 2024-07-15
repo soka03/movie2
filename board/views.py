@@ -7,7 +7,7 @@ from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.decorators import api_view, permission_classes, authentication_classes
 from rest_framework.permissions import IsAuthenticated, AllowAny, IsAuthenticatedOrReadOnly
-"""
+
 @api_view(['GET'])
 def init_db(request):
     url = "https://port-0-minihackathon-12-lyec0qpi97716ac6.sel5.cloudtype.app/movie"
@@ -18,23 +18,6 @@ def init_db(request):
         if serializer.is_valid():
             serializer.save()
     return Response(serializer.data , status=status.HTTP_201_CREATED)
-"""
-@api_view(['GET'])
-def init_db(request):
-    url = "https://port-0-minihackathon-12-lyec0qpi97716ac6.sel5.cloudtype.app/movie"
-    res = requests.get(url)
-    movies = res.json()['movies']
-    for movie in movies:
-        actors_data = movie.pop('actors', [])
-        serializer = SaveMovieSerializer(data=movie)
-        if serializer.is_valid():
-            saved_movie = serializer.save()
-            for actor_data in actors_data:
-                actor, created = Actor.objects.get_or_create(**actor_data)
-                saved_movie.actors.add(actor)
-        else:
-            print(serializer.errors)  # 유효성 검사 실패 시 에러 출력
-    return Response({"message": "Movies initialized"}, status=status.HTTP_201_CREATED)
 
 
 @api_view(['GET'])
