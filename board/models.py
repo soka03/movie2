@@ -23,10 +23,21 @@ class Movie(models.Model):
     actors = models.ManyToManyField(Actor)
 
 
-
+"""
 class Comment(models.Model):
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE, null = True)
     movie = models.ForeignKey(Movie, on_delete=models.CASCADE, related_name='comments')
     comment = models.TextField()
+"""
+
+
+class Comment(models.Model):
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE, null=True)
+    movie = models.ForeignKey(Movie, on_delete=models.CASCADE, related_name='comments')
+    comment = models.TextField()
+
+    class Meta:
+        db_table = 'board_comment'  # 기존 테이블 이름 사용
+
     
 
