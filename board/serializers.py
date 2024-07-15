@@ -68,7 +68,7 @@ class SaveMovieSerializer(serializers.ModelSerializer):
         for actor_data in actor_datas:
             actor, created = Actor.objects.get_or_create(**actor_data)
             movie.actors.add(actor)
-        return "success"
+        return movie
 
 
 class CommentSerializer(serializers.ModelSerializer):
