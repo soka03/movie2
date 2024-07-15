@@ -51,6 +51,7 @@ INSTALLED_APPS = [
     'django.contrib.sites',
     'allauth.socialaccount',
     'allauth.socialaccount.providers.google',
+    'corsheaders',
 ]
 
 SITE_ID = 1
@@ -67,13 +68,14 @@ MIDDLEWARE = [
     'allauth.account.middleware.AccountMiddleware',
 ]
 
+ROOT_URLCONF = 'community.urls'
+
 CORS_ORIGIN_WHITELIST = [
-    "https://localhost:3000",
-    "https://1270.0.1:8000"]
+    "http://localhost:3000",
+    "http://127.0.0.1:8000",
+    "https://minihackton.store"]
 
 CORS_ALLOW_CREDENTIALS = True
-
-ROOT_URLCONF = 'community.urls'
 
 TEMPLATES = [
     {
