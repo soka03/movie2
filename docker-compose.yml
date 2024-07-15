@@ -11,7 +11,7 @@ services:
     networks:
       - server
 
-nginx:
+  nginx:
     image: nginx:latest
     container_name: nginx
     volumes:
@@ -28,7 +28,7 @@ nginx:
       - server
     command: '/bin/sh -c ''while :; do sleep 6h & wait $${!}; nginx -s reload; done & nginx -g "daemon off;"'''
 
-certbot:
+  certbot:
 	  image: certbot/certbot
 	  container_name: certbot
 	  restart: unless-stopped
